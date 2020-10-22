@@ -6,6 +6,7 @@ keep_md: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "./figures/")
 
 library(tidyr)
 library(dplyr)
@@ -191,3 +192,4 @@ grid.arrange(weekend_plot, weekdays_plot, nrow = 2)
 
 
 ```
+
