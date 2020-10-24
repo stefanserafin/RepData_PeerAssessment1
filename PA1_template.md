@@ -5,24 +5,13 @@ output:
     keep_md: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.path = "./figures/")
 
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-library(reshape)
-library(gridExtra)
-
-options(dplyr.summarise.inform = FALSE)
-options(scipen=999)
-```
 
 
 
 ## Loading and preprocessing the data
-```{r, echo=TRUE}
+
+```r
 activity_data <- read.csv("activity.csv")
 activity_data$date <- as.Date(activity_data$date, "%Y-%m-%d")
 ```
@@ -31,7 +20,8 @@ activity_data$date <- as.Date(activity_data$date, "%Y-%m-%d")
 ## What is mean total number of steps taken per day?
 
 The sum of all steps displayed as a histogram per day
-```{r, echo = TRUE}
+
+```r
 sum_of_steps <- na.omit(activity_data)
 sum_of_steps <- sum_of_steps %>%
   select(date, steps) %>%
@@ -47,14 +37,16 @@ hist(sum_of_steps$sum,
      xlab = "Number of steps taken per day",
      ylim = c(0, 12)
 )
-
 ```
 
-The mean of all the steps is '`r total_mean`', where the median of all the steps is '`r total_median`'.
+![](./figures/unnamed-chunk-2-1.png)<!-- -->
+
+The mean of all the steps is '10766.1886792', where the median of all the steps is '10765'.
 
 
 ## What is the average daily activity pattern?
-```{r, echo=TRUE}
+
+```r
 my_steps <- na.omit(activity_data)
 
 my_steps <- my_steps %>%
@@ -71,16 +63,18 @@ plot(x = my_steps$interval,
      main = "Average steps per day intervals",
      xlab = "Interval",
      ylab = "Average number of steps")
-
 ```
 
-The interval at `r max_interval$interval` has the greatest mean, which is `r max_interval$mean`.
+![](./figures/unnamed-chunk-3-1.png)<!-- -->
+
+The interval at 835 has the greatest mean, which is 206.1698113.
 
 ## Imputing missing values
-There are `r sum(is.na(activity_data))` missing values. The missing values will 
-be replaced by the over all mean, which is `r mean(na.omit(activity_data$steps))` .
+There are 2304 missing values. The missing values will 
+be replaced by the over all mean, which is 37.3825996 .
 
-```{r, echo=TRUE}
+
+```r
 new_data_set <- activity_data
 
 index = 0
@@ -112,15 +106,16 @@ hist(sum_of_steps$sum,
      xlab = "Number of steps taken per day",
      ylim = c(0, 12)
 )
-
 ```
+
+![](./figures/unnamed-chunk-4-1.png)<!-- -->
 
 Since provided a very basic functionality to just fill the missing values with
 the mean of all steps of all the dates, there is an increase of the counts
 for that value. Other values around the lower or upper areas of the histogram
 don't change.
 The mean of all the steps after replacing the missing values with the overall mean
-is '`r total_mean`', where the median of all the steps is '`r total_median`'.
+is '10766.1886792', where the median of all the steps is '10766.1886792'.
 
 
 
@@ -130,7 +125,8 @@ rather later in the day around 09:00, where during the week activities start
 shortly after 05:00. During weekends people seem to be overall more active also
 during late hours such as 20:00.
 
-```{r, echo=TRUE}
+
+```r
 weekend_days <- c("Sa", "So", "Sat", "Sun")
 week_data <- na.omit(activity_data)
 week_data <- mutate(week_data, sapply(week_data$date, function(day){
@@ -189,8 +185,7 @@ weekdays_plot <- ggplot(weekdays_data, aes(x = interval, y = mean)) +
   )
 
 grid.arrange(weekend_plot, weekdays_plot, nrow = 2)
-
-
-
 ```
+
+![](./figures/unnamed-chunk-5-1.png)<!-- -->
 
